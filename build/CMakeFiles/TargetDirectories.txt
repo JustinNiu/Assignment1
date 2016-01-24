@@ -1,0 +1,3 @@
+/Users/siyuanniu/Desktop/Assignment1/build/Assign1/CMakeFiles/Assign1.dir
+/Users/siyuanniu/Desktop/Assignment1/build/CMakeFiles/ALL_BUILD.dir
+/Users/siyuanniu/Desktop/Assignment1/build/CMakeFiles/ZERO_CHECK.dir
