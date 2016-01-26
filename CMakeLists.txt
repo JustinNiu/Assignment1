@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.0)
-project (PROJECT1
+project (MUSI8903
         VERSION 0.0.0.1)
 
 #######################################################################################################
@@ -45,5 +45,6 @@ message(STATUS "")
 
 # generate platform config file
 configure_file(${CMAKE_SOURCE_DIR}/src/${PROJECT_NAME}Config.h.in ${CMAKE_BINARY_DIR}/inc/${PROJECT_NAME}Config.h)
-
+# integrate cppcheck targets in IDE
+option (WITH_CPPCHECKTARGET "Add target for cppcheck testing" ON)
 
