@@ -17,16 +17,21 @@ IirComb::IirComb() {}
 IirComb::~IirComb() {}
 
 Error_t IirComb::filtering(float **inputBuffer, float **outputBuffer, int numSamples) {
-    //Implement filter
-    for (int channelId = 0; channelId < filterNumChannels; channelId++) {
-        for (int dataId = 0; dataId < numSamples; dataId++) {
-            outputBuffer[channelId][dataId] = inputBuffer[channelId][dataId] + gain*delayBuffer[channelId][delayLineInSamples-1];
+    //for each channel
+    for (int channel = 0; channel < filterNumChannels; channel++) {
+        
+        //for each frame
+        for (int dataFrame = 0; dataFrame < numSamples; dataFrame++) {
+
+            //feedbackward
+            outputBuffer[channel][dataFrame] = inputBuffer[channel][dataFrame] + gain*delayBuffer[channel][delayLineInSamples-1];
             
+            //iterate the delayline
             for (int i = delayLineInSamples-1; i > 0 ; i--) {
-                delayBuffer[channelId][i] = delayBuffer[channelId][i-1];
+                delayBuffer[channel][i] = delayBuffer[channel][i-1];
             }
             
-            delayBuffer[channelId][0] = outputBuffer[channelId][dataId];
+            delayBuffer[channel][0] = outputBuffer[channel][dataFrame];
             
         }
     }
@@ -34,18 +39,18 @@ Error_t IirComb::filtering(float **inputBuffer, float **outputBuffer, int numSam
     return kNoError;
 }
 
-void IirComb::setDelayLineInSamples(long int paramVal)
+void IirComb::setDelayLineInSamples(long int leng)
 {
-    delayLineInSamples = paramVal;
+    delayLineInSamples = leng;
 }
 
-void IirComb::setGain(float paramVal) {
-    if (fabs(paramVal) > 1)
+void IirComb::setGain(float g) {
+    if (fabs(g) > 1)
     {
         std::cout << "Incorrect parameter value for filter gain. Magnitude should be <= 1" << std::endl;
         exit(0);
     }
-    gain = paramVal;
+    gain = g;
 }
 
 

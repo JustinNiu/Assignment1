@@ -12,6 +12,8 @@
 
 #include "Fir.h"
 
+
+//constructor
 FirComb::FirComb() {}
 
 FirComb::~FirComb() {}
