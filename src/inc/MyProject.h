@@ -38,7 +38,7 @@ public:
     float getDelayLineInSamples();
     float getGain();
     
-    virtual Error_t process (float **inputBuffer, float **outputBuffer, int numSamples) = 0;
+    virtual Error_t filtering (float **inputBuffer, float **outputBuffer, int numSamples) = 0;
     
     long int delayLineInSamples;
     

@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
                             **ppfAudioData      = 0;
     
     static const int        blockSize           = 1024;
-    int                     type                = 0;//what is this?
+    int                     type                = 0;//what is this?  
 
     clock_t                 time                = 0;
 
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
     {
         long long iNumFrames = blockSize;
         phAudioFile->readData(inputAudioData, iNumFrames);
-        filter->process(inputAudioData, outputAudioData, iNumFrames);
+        filter->filtering(inputAudioData, outputAudioData, iNumFrames);
         for (int i = 0; i < iNumFrames; i++)
         {
             for (int j = 0; j < spec.iNumChannels; j++)

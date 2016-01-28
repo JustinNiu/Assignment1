@@ -16,7 +16,7 @@ IirComb::IirComb() {}
 
 IirComb::~IirComb() {}
 
-Error_t IirComb::process(float **inputBuffer, float **outputBuffer, int numSamples) {
+Error_t IirComb::filtering(float **inputBuffer, float **outputBuffer, int numSamples) {
     //Implement filter
     for (int channelId = 0; channelId < filterNumChannels; channelId++) {
         for (int dataId = 0; dataId < numSamples; dataId++) {
