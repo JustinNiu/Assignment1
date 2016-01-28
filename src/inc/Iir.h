@@ -18,11 +18,10 @@ public:
     
     ~IirComb();
     
-    //void processFilter(float **inputAudioData, float **outputAudioData, CAudioFileIf::FileSpec_t spec, long long iInFileLength) override;
     Error_t filtering (float **inputBuffer, float **outputBuffer, int numSamples) override;
     
-    void setDelayLineInSamples(long int paramVal) override;
-    void setGain(float paramVal) override;
+    void setDelayLineInSamples(long int leng) override;
+    void setGain(float g) override;
     
 private:
     

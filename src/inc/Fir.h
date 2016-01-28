@@ -19,8 +19,8 @@ public:
     
     Error_t filtering (float **inputBuffer, float **outputBuffer, int numSamples) override;
     
-    void setDelayLineInSamples(long int paramVal) override;
-    void setGain(float paramVal) override;
+    void setDelayLineInSamples(long int leng) override;
+    void setGain(float g) override;
     
 private:
     
