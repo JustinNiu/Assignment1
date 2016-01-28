@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 {
     std::string             sInputFilePath,                 //!< file paths
                             sOutputFilePath,
-                            sInput2TxtPath;
+                            outputTxtPath;
     
     float                   **inputAudioData    = 0,
                             **outputAudioData   = 0;
@@ -59,19 +59,26 @@ int main(int argc, char* argv[])
 
     //////////////////////////////////////////////////////////////////////////////
     // open the input wave file
+
+    //point to the object
     CAudioFileIf::create(phAudioFile);
+    
+    //open file
     phAudioFile->openFile(sInputFilePath, CAudioFileIf::FileIoType_t::kFileRead);
+
     sOutputFilePath = sInputFilePath + "output.txt";
-    sInput2TxtPath = sInputFilePath + "input.txt";
+    outputTxtPath = sInputFilePath + "input.txt";
     outfile.open(sOutputFilePath);
-    infile.open(sInput2TxtPath);
+    infile.open(outputTxtPath);
     
     CAudioFileIf::FileSpec_t spec;
     phAudioFile->getFileSpec(spec);
     
+    //allocate memory for pointers for input and output
     inputAudioData = new float*[spec.iNumChannels];
     outputAudioData = new float*[spec.iNumChannels];
     
+    //point all the pointers in each channel to corresponding blocks
     for(int i = 0; i < spec.iNumChannels; i++)
     {
         inputAudioData[i] = new float[blockSize];
