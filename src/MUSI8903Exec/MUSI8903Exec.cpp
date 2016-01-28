@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     float                   **inputAudioData    = 0,
                             **outputAudioData   = 0;
     
-    static const int        blockSize           = 1024;
+    static const int        kBlockSize           = 1024;
     int                     type                = 0;//what is this?
 
 
@@ -81,8 +81,8 @@ int main(int argc, char* argv[])
     //point all the pointers in each channel to corresponding blocks
     for(int i = 0; i < spec.iNumChannels; i++)
     {
-        inputAudioData[i] = new float[blockSize];
-        outputAudioData[i] = new float[blockSize];
+        inputAudioData[i] = new float[kBlockSize];
+        outputAudioData[i] = new float[kBlockSize];
     }
     
     
@@ -92,9 +92,10 @@ int main(int argc, char* argv[])
     
     error_check = CMyProject::create(filter, type, delayTimeInSec, gain, spec.fSampleRateInHz, spec.iNumChannels);
     
+    //process audio until reach the end of the file
     while (!phAudioFile->isEof())
     {
-        long long iNumFrames = blockSize;
+        long long iNumFrames = kBlockSize;
         phAudioFile->readData(inputAudioData, iNumFrames);
         filter->filtering(inputAudioData, outputAudioData, iNumFrames);
         for (int i = 0; i < iNumFrames; i++)
