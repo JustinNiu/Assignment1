@@ -41,11 +41,15 @@ Error_t IirComb::filtering(float **inputBuffer, float **outputBuffer, int numSam
     return kNoError;
 }
 
+
+//set the length of the delay line
 void IirComb::setDelayLineInSamples(long int leng)
 {
     delayLineInSamples = leng;
 }
 
+
+//set the gain
 void IirComb::setGain(float g) {
     if (fabs(g) > 1)
     {
