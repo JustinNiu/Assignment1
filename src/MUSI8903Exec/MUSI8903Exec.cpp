@@ -1,10 +1,16 @@
 
 #include <iostream>
 #include <ctime>
+#include <string>
+#include <ctime>
+#include <fstream>
+#include <cmath>
 
+#include "PROJECT1Config.h"
 #include "MUSI8903Config.h"
 
 #include "AudioFileIf.h"
+#include "MyProject.h"
 
 using std::cout;
 using std::endl;
@@ -17,17 +23,28 @@ void    showClInfo ();
 int main(int argc, char* argv[])
 {
     std::string             sInputFilePath,                 //!< file paths
-                            sOutputFilePath;
-
-    static const int        kBlockSize          = 1024;
+                            sOutputFilePath,
+                            sInput2TxtPath;
+    
+    float                   **inputAudioData    = 0,
+                            **outputAudioData   = 0,
+                            **ppfAudioData      = 0;
+    
+    static const int        blockSize           = 1024;
+    int                     type                = 0;//what is this?
 
     clock_t                 time                = 0;
 
-    float                   **ppfAudioData      = 0;
+    float                   delayTimeInSec      = 0.0,
+                            gain                = 0.0;
+    CMyProject              *filter             = 0;
+    Error_t                 error_check;
 
     CAudioFileIf            *phAudioFile        = 0;
     std::fstream            hOutputFile;
     CAudioFileIf::FileSpec_t stFileSpec;
+    std::ofstream           outfile,infile;
+
 
     showClInfo ();
 
@@ -46,68 +63,77 @@ int main(int argc, char* argv[])
     //////////////////////////////////////////////////////////////////////////////
     // open the input wave file
     CAudioFileIf::create(phAudioFile);
-    phAudioFile->openFile(sInputFilePath, CAudioFileIf::kFileRead);
-    if (!phAudioFile->isOpen())
+    phAudioFile->openFile(sInputFilePath, CAudioFileIf::FileIoType_t::kFileRead);
+    sOutputFilePath = sInputFilePath + "output.txt";
+    sInput2TxtPath = sInputFilePath + "input.txt";
+    outfile.open(sOutputFilePath);
+    infile.open(sInput2TxtPath);
+    
+    CAudioFileIf::FileSpec_t spec;
+    phAudioFile->getFileSpec(spec);
+    
+    inputAudioData = new float*[spec.iNumChannels];
+    outputAudioData = new float*[spec.iNumChannels];
+    
+    for(int i = 0; i < spec.iNumChannels; i++)
     {
-        cout << "Wave file open error!";
-        return -1;
+        inputAudioData[i] = new float[blockSize];
+        outputAudioData[i] = new float[blockSize];
     }
-    phAudioFile->getFileSpec(stFileSpec);
-
+    
+    
+    
     //////////////////////////////////////////////////////////////////////////////
-    // open the output text file
-    hOutputFile.open (sOutputFilePath.c_str(), std::ios::out);
-    if (!hOutputFile.is_open())
-    {
-        cout << "Text file open error!";
-        return -1;
-    }
-
-    //////////////////////////////////////////////////////////////////////////////
-    // allocate memory
-    ppfAudioData            = new float* [stFileSpec.iNumChannels];
-    for (int i = 0; i < stFileSpec.iNumChannels; i++)
-        ppfAudioData[i] = new float [kBlockSize];
-
-    time                    = clock();
-    //////////////////////////////////////////////////////////////////////////////
-    // get audio data and write it to the output file
+    // do processing
+    
+    error_check = CMyProject::create(filter, type, delayTimeInSec, gain, spec.fSampleRateInHz, spec.iNumChannels);
+    if (error_check == kFunctionIllegalCallError)
+        cout << "Illegal filter type, use 0 for FIR and 1 for IIR"<<endl;
+    else if (error_check == kFunctionInvalidArgsError)
+        cout << "Invalid filter parameters used. Delay should be positive and Gain should be between -1 and +1."<<endl;
+    
+    cout << "Processing....." << endl;
     while (!phAudioFile->isEof())
     {
-        long long iNumFrames = kBlockSize;
-        phAudioFile->readData(ppfAudioData, iNumFrames);
-
+        long long iNumFrames = blockSize;
+        phAudioFile->readData(inputAudioData, iNumFrames);
+        filter->process(inputAudioData, outputAudioData, iNumFrames);
         for (int i = 0; i < iNumFrames; i++)
         {
-            for (int c = 0; c < stFileSpec.iNumChannels; c++)
+            for (int j = 0; j < spec.iNumChannels; j++)
             {
-                hOutputFile << ppfAudioData[c][i] << "\t";
+                outfile << outputAudioData[j][i] << " ";
+                infile << inputAudioData[j][i] << " ";
             }
-            hOutputFile << endl;
+            outfile << endl;
+            infile << endl;
         }
     }
-
-    cout << "reading/writing done in: \t"    << (clock()-time)*1.F/CLOCKS_PER_SEC << " seconds." << endl;
-
+    
+    cout << "Exited" << endl;
+    
     //////////////////////////////////////////////////////////////////////////////
     // clean-up
-    CAudioFileIf::destroy(phAudioFile);
-    hOutputFile.close();
-
-    for (int i = 0; i < stFileSpec.iNumChannels; i++)
-        delete [] ppfAudioData[i];
-    delete [] ppfAudioData;
-    ppfAudioData = 0;
-
-    return 0;
+    outfile.close();
+    infile.close();
     
+    for (int i = 0; i < spec.iNumChannels; i++)
+    {
+        delete[] inputAudioData[i];
+        delete[] outputAudioData[i];
+    }
+    delete[] inputAudioData;
+    delete[] outputAudioData;
+    
+    CAudioFileIf::destroy(phAudioFile);
+    CMyProject::destroy(filter);
 }
 
 
 void     showClInfo()
 {
     cout << "GTCMT MUSI8903" << endl;
-    cout << "(c) 2016 by Alexander Lerch" << endl;
+    cout << "(c) 2016 by Hua & Siyuan" << endl;
     cout  << endl;
 
     return;

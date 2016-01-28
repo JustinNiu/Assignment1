@@ -1,5 +1,5 @@
 //
-//  Assign1.cpp
+//  CMyProject.cpp
 //  MUSI8903
 //
 //  Created by Siyuan Niu on 1/26/16.
@@ -9,42 +9,42 @@
 #include <stdio.h>
 #include <cmath>
 #include "ErrorDef.h"
-#include "Assign1.h"
+#include "MyProject.h"
 #include "Fir.h"
 #include "Iir.h"
 
-Assign1::Assign1 () {}
-Assign1::~Assign1 () {
+CMyProject::CMyProject () {}
+CMyProject::~CMyProject () {
     this->reset();
 }
 
-Error_t Assign1::create(Assign1*& pAssign1, int type, float delayTimeInSecs, float gain, long int sampleRate, int numChannels)
+Error_t CMyProject::create(CMyProject*& pCMyProject, int type, float delayTimeInSecs, float gain, long int sampleRate, int numChannels)
 {
     if (type == 0)
-        pAssign1 = new FirComb();
+        pCMyProject = new FirComb();
     else
-        pAssign1 = new IirComb();
+        pCMyProject = new IirComb();
     
-    if (!pAssign1)
+    if (!pCMyProject)
         return kUnknownError;
     
-    pAssign1->init(delayTimeInSecs, gain, sampleRate, numChannels);
+    pCMyProject->init(delayTimeInSecs, gain, sampleRate, numChannels);
     
     return kNoError;
 }
 
-Error_t Assign1::destroy (Assign1*& pAssign1)
+Error_t CMyProject::destroy (CMyProject*& pCMyProject)
 {
-    if (!pAssign1)
+    if (!pCMyProject)
         return kUnknownError;
     
-    delete pAssign1;
-    pAssign1 = 0;
+    delete pCMyProject;
+    pCMyProject = 0;
     
     return kNoError;
 }
 
-Error_t Assign1::init(float delayTimeInSecs, float gainValue, long int sampleRate, int numChannels)
+Error_t CMyProject::init(float delayTimeInSecs, float gainValue, long int sampleRate, int numChannels)
 {
     gain = gainValue;
     filterSampleRate = sampleRate;
@@ -70,7 +70,7 @@ Error_t Assign1::init(float delayTimeInSecs, float gainValue, long int sampleRat
 }
 
 
-Error_t Assign1::reset () {
+Error_t CMyProject::reset () {
     
     std::cout << delayBuffer[0][0] << std::endl;
     std::cout << filterNumChannels << std::endl;
@@ -86,27 +86,27 @@ Error_t Assign1::reset () {
     return kNoError;
 }
 
-float Assign1::getDelayLineInSamples()
+float CMyProject::getDelayLineInSamples()
 {
     return delayLineInSamples;
 }
 
-float Assign1::getGain()
+float CMyProject::getGain()
 {
     return gain;
 }
 
-void Assign1::setDelayLineInSamples(long int paramVal)
+void CMyProject::setDelayLineInSamples(long int paramVal)
 {
     delayLineInSamples = paramVal;
 }
 
-void Assign1::setGain(float paramVal)
+void CMyProject::setGain(float paramVal)
 {
     gain = paramVal;
 }
 
-long int Assign1::getDelayLineInSamples(long int fs, float delayLineInSecs)
+long int CMyProject::getDelayLineInSamples(long int fs, float delayLineInSecs)
 {
     return roundf(fs*delayLineInSecs);
 }
