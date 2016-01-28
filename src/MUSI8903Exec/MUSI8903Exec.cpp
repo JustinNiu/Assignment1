@@ -27,13 +27,11 @@ int main(int argc, char* argv[])
                             sInput2TxtPath;
     
     float                   **inputAudioData    = 0,
-                            **outputAudioData   = 0,
-                            **ppfAudioData      = 0;
+                            **outputAudioData   = 0;
     
     static const int        blockSize           = 1024;
-    int                     type                = 0;//what is this?  
+    int                     type                = 0;//what is this?
 
-    clock_t                 time                = 0;
 
     float                   delayTimeInSec      = 0.0,
                             gain                = 0.0;
@@ -42,7 +40,6 @@ int main(int argc, char* argv[])
 
     CAudioFileIf            *phAudioFile        = 0;
     std::fstream            hOutputFile;
-    CAudioFileIf::FileSpec_t stFileSpec;
     std::ofstream           outfile,infile;
 
 
@@ -87,12 +84,7 @@ int main(int argc, char* argv[])
     // do processing
     
     error_check = CMyProject::create(filter, type, delayTimeInSec, gain, spec.fSampleRateInHz, spec.iNumChannels);
-    if (error_check == kFunctionIllegalCallError)
-        cout << "Illegal filter type, use 0 for FIR and 1 for IIR"<<endl;
-    else if (error_check == kFunctionInvalidArgsError)
-        cout << "Invalid filter parameters used. Delay should be positive and Gain should be between -1 and +1."<<endl;
     
-    cout << "Processing....." << endl;
     while (!phAudioFile->isEof())
     {
         long long iNumFrames = blockSize;
@@ -109,8 +101,6 @@ int main(int argc, char* argv[])
             infile << endl;
         }
     }
-    
-    cout << "Exited" << endl;
     
     //////////////////////////////////////////////////////////////////////////////
     // clean-up
@@ -133,7 +123,7 @@ int main(int argc, char* argv[])
 void     showClInfo()
 {
     cout << "GTCMT MUSI8903" << endl;
-    cout << "(c) 2016 by Hua & Siyuan" << endl;
+    cout << "(c) 2016 by Siyuan & Hua" << endl;
     cout  << endl;
 
     return;
