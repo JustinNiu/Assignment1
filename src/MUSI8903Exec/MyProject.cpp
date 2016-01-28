@@ -86,28 +86,4 @@ Error_t CMyProject::reset () {
     return kNoError;
 }
 
-float CMyProject::getDelayLineInSamples()
-{
-    return delayLineInSamples;
-}
-
-float CMyProject::getGain()
-{
-    return gain;
-}
-
-void CMyProject::setDelayLineInSamples(long int paramVal)
-{
-    delayLineInSamples = paramVal;
-}
-
-void CMyProject::setGain(float paramVal)
-{
-    gain = paramVal;
-}
-
-long int CMyProject::getDelayLineInSamples(long int fs, float delayLineInSecs)
-{
-    return roundf(fs*delayLineInSecs);
-}
 
