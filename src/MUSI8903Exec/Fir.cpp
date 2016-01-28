@@ -48,6 +48,7 @@ void FirComb::setDelayLineInSamples(long int leng)
     delayLineInSamples = leng;
 }
 
+//set the gain
 void FirComb::setGain(float g)
 {
     gain = g;
