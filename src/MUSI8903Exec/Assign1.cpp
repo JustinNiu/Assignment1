@@ -10,6 +10,8 @@
 #include <cmath>
 #include "ErrorDef.h"
 #include "Assign1.h"
+#include "Fir.h"
+#include "Iir.h"
 
 Assign1::Assign1 () {}
 Assign1::~Assign1 () {
@@ -19,9 +21,9 @@ Assign1::~Assign1 () {
 Error_t Assign1::create(Assign1*& pAssign1, int type, float delayTimeInSecs, float gain, long int sampleRate, int numChannels)
 {
     if (type == 0)
-        pAssign1 = new FIRCombFilter();
+        pAssign1 = new FirComb();
     else
-        pAssign1 = new IIRCombFilter();
+        pAssign1 = new IirComb();
     
     if (!pAssign1)
         return kUnknownError;

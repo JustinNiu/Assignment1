@@ -11,16 +11,16 @@
 
 #include "Assign1.h"
 
-class FIRCombFilter : public CMyProject
+class FirComb : public Assign1
 {
 public:
-    FIRCombFilter();    
-    ~FIRCombFilter();
+    FirComb();
+    ~FirComb();
     
-    Error_t process (float **inputBuffer, float **outputBuffer, int numSamples) override;
+    Error_t process (float **inputBuffer, float **outputBuffer, int numSamples) ;
     
-    void setDelayLineInSamples(long int paramVal) override;
-    void setGain(float paramVal) override;
+    void setDelayLineInSamples(long int paramVal) ;
+    void setGain(float paramVal) ;
     
 private:
     
